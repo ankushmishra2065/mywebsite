@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# IMPORTANT: replace YOUR-DOMAIN.com with your real HTTPS domain.
+Sitemap: https://YOUR-DOMAIN.com/sitemap.xml
