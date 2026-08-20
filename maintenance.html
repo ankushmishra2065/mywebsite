@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1463ff">
+  <meta name="description" content="This website is currently under maintenance. We'll be back soon.">
+  <title>We'll Be Back Soon | Maintenance</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --blue: #1764e8;
+      --blue-dark: #0d47b5;
+      --text: #101828;
+      --muted: #667085;
+      --card: rgba(255,255,255,.82);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+                   "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(23,100,232,.10), transparent 28%),
+        radial-gradient(circle at 85% 80%, rgba(23,100,232,.10), transparent 30%),
+        linear-gradient(135deg, #f8fbff 0%, #eef5ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(2px);
+      pointer-events: none;
+    }
+
+    body::before {
+      width: 280px;
+      height: 280px;
+      background: rgba(23,100,232,.06);
+      top: -100px;
+      left: -90px;
+    }
+
+    body::after {
+      width: 360px;
+      height: 360px;
+      background: rgba(23,100,232,.05);
+      bottom: -170px;
+      right: -120px;
+    }
+
+    .page {
+      width: min(1100px, 92%);
+      text-align: center;
+      padding: 55px 20px 35px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -.5px;
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), #4e8cff);
+      border-radius: 15px;
+      box-shadow: 0 12px 28px rgba(23,100,232,.25);
+      font-size: 25px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .brand span {
+      color: var(--text);
+    }
+
+    .brand strong {
+      color: var(--blue);
+    }
+
+    h1 {
+      font-size: clamp(42px, 7vw, 78px);
+      line-height: 1.02;
+      letter-spacing: -3px;
+      margin-bottom: 22px;
+    }
+
+    .highlight {
+      color: var(--blue);
+    }
+
+    .subtitle {
+      max-width: 680px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: clamp(17px, 2.5vw, 21px);
+      line-height: 1.7;
+    }
+
+    .line {
+      width: 70px;
+      height: 4px;
+      border-radius: 10px;
+      background: var(--blue);
+      margin: 25px auto;
+    }
+
+    .message {
+      max-width: 620px;
+      margin: 0 auto 30px;
+      color: #526074;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .status-card {
+      width: min(620px, 100%);
+      margin: 0 auto 28px;
+      padding: 23px 27px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      text-align: left;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 24px;
+      background: var(--card);
+      box-shadow: 0 20px 60px rgba(31,65,114,.12);
+      backdrop-filter: blur(16px);
+    }
+
+    .clock {
+      flex: 0 0 70px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 4px solid rgba(23,100,232,.16);
+      background: #f1f6ff;
+      color: var(--blue);
+      font-size: 31px;
+    }
+
+    .status-label {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .status-title {
+      color: var(--blue);
+      font-size: 21px;
+      font-weight: 750;
+      margin-bottom: 3px;
+    }
+
+    .status-small {
+      color: #667085;
+      font-size: 14px;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      margin: 4px 0 28px;
+    }
+
+    .notify-btn {
+      border: 0;
+      cursor: pointer;
+      color: white;
+      background: linear-gradient(135deg, var(--blue), #2d76ef);
+      padding: 16px 28px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      box-shadow: 0 14px 30px rgba(23,100,232,.25);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .notify-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 35px rgba(23,100,232,.32);
+    }
+
+    .notify-btn:active {
+      transform: translateY(0);
+    }
+
+    .connected {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 13px;
+    }
+
+    .socials {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .socials a {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      color: #526074;
+      background: rgba(255,255,255,.8);
+      border: 1px solid rgba(16,24,40,.06);
+      border-radius: 50%;
+      font-weight: 800;
+      transition: .2s ease;
+    }
+
+    .socials a:hover {
+      color: white;
+      background: var(--blue);
+      transform: translateY(-3px);
+    }
+
+    footer {
+      margin-top: 35px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(16,24,40,.07);
+      color: #7b8798;
+      font-size: 13px;
+    }
+
+    .gear {
+      position: fixed;
+      right: 7%;
+      bottom: 10%;
+      width: 130px;
+      height: 130px;
+      color: rgba(23,100,232,.12);
+      font-size: 120px;
+      line-height: 1;
+      animation: spin 18s linear infinite;
+      z-index: 0;
+      user-select: none;
+    }
+
+    .cone {
+      position: fixed;
+      left: 7%;
+      bottom: 8%;
+      font-size: 90px;
+      opacity: .13;
+      z-index: 0;
+      animation: float 4s ease-in-out infinite;
+      user-select: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @media (max-width: 650px) {
+      .page {
+        padding-top: 35px;
+      }
+
+      h1 {
+        letter-spacing: -2px;
+      }
+
+      .brand {
+        margin-bottom: 22px;
+      }
+
+      .status-card {
+        padding: 20px;
+        gap: 14px;
+      }
+
+      .clock {
+        flex-basis: 58px;
+        width: 58px;
+        height: 58px;
+        font-size: 25px;
+      }
+
+      .status-title {
+        font-size: 18px;
+      }
+
+      .gear,
+      .cone {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <!-- Change "Your Website" to your actual website name -->
+    <div class="brand">
+      <div class="brand-icon">⚙</div>
+      <span><strong>Your</strong> Website</span>
+    </div>
+
+    <h1>We'll Be Back <span class="highlight">Soon!</span></h1>
+
+    <p class="subtitle">
+      This website is currently <span class="highlight">under maintenance.</span>
+    </p>
+
+    <div class="line"></div>
+
+    <p class="message">
+      We are working hard to improve your experience and bring you something better.
+      Thank you for your patience and understanding.
+    </p>
+
+    <section class="status-card">
+      <div class="clock">◷</div>
+      <div>
+        <div class="status-label">CURRENT STATUS</div>
+        <div class="status-title">We'll be back shortly!</div>
+        <div class="status-small">Please check back again soon.</div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button class="notify-btn" onclick="notifyUser()">
+        ✉ &nbsp; Notify Me When It's Back
+      </button>
+    </div>
+
+    <div class="connected">Stay Connected</div>
+
+    <div class="socials">
+      <a href="#" aria-label="Facebook">f</a>
+      <a href="#" aria-label="X">𝕏</a>
+      <a href="#" aria-label="Instagram">◎</a>
+      <a href="#" aria-label="LinkedIn">in</a>
+    </div>
+
+    <footer>
+      © <span id="year"></span> Your Website. All Rights Reserved.
+    </footer>
+  </main>
+
+  <div class="gear">⚙</div>
+  <div class="cone">🚧</div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function notifyUser() {
+      alert("Thanks! We'll let you know when the website is back online.");
+    }
+  </script>
+</body>
+</html>
