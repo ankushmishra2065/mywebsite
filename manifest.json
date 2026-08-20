@@ -1,0 +1,9 @@
+{
+  "name": "EduNexa Nepal",
+  "short_name": "EduNexa",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070914",
+  "theme_color": "#0b1020",
+  "description": "NEB Class 11\u201312 study resources, CEE and IOE preparation for Nepal."
+}
