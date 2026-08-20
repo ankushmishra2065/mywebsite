@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://mishraankush.com.np/sitemap.xml
