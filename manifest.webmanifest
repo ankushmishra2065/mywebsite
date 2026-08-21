@@ -1,9 +1,0 @@
-{
-  "name":"EduNexa V5",
-  "short_name":"EduNexa",
-  "start_url":"./",
-  "display":"standalone",
-  "background_color":"#080b16",
-  "theme_color":"#0b1020",
-  "description":"Fast Class 11–12 Science and Management study hub."
-}
