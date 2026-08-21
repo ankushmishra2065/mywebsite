@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1020">
+<meta name="description" content="MishraAnkush — fast Class 11–12 Science and Management study hub with chapter summaries, key points, questions with answers, quizzes and an offline AI study assistant.">
+<meta name="robots" content="index,follow">
+<link rel="manifest" href="manifest.webmanifest">
+<title>MishraAnkush | Class 11–12 Study Hub</title>
+<link rel="stylesheet" href="style.css">
+<style id="mishraankush-v6-responsive">
+/* MishraAnkush V6 — responsive layout for phone, tablet and laptop */
+*,*::before,*::after{box-sizing:border-box}
+html{width:100%;min-width:0;overflow-x:hidden}
+body{width:100%;min-width:0;max-width:100vw;overflow-x:hidden}
+img,video,canvas,svg{max-width:100%;height:auto}
+button,input,select,textarea{max-width:100%;font:inherit}
+.container,.wrapper,.main,.content{width:min(1200px,100%);margin-inline:auto}
+@media (max-width: 1024px){
+  .container,.wrapper,.main,.content{width:100%;padding-left:18px;padding-right:18px}
+  header,nav,.navbar{flex-wrap:wrap}
+  .grid,.cards,.subjects,.chapters,.features{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .sidebar{width:100%;position:relative}
+}
+@media (max-width: 700px){
+  .container,.wrapper,.main,.content{padding-left:12px;padding-right:12px}
+  header{padding:10px 12px !important}
+  nav,.navbar{gap:8px !important}
+  .grid,.cards,.subjects,.chapters,.features{grid-template-columns:1fr !important}
+  .hero,.dashboard,.study-panel,.quiz-panel{padding:16px !important}
+  h1{font-size:clamp(1.55rem,7vw,2.25rem)}
+  h2{font-size:clamp(1.25rem,6vw,1.75rem)}
+  h3{font-size:clamp(1.05rem,5vw,1.35rem)}
+  .row,.toolbar,.actions{flex-wrap:wrap !important}
+  .row>*,.toolbar>*{min-width:0}
+  table{display:block;width:100%;overflow-x:auto}
+}
+@media (max-width: 420px){
+  .container,.wrapper,.main,.content{padding-left:9px;padding-right:9px}
+  button{min-height:42px}
+  .hero,.dashboard,.study-panel,.quiz-panel{padding:12px !important}
+}
+/* More visible, lightweight background */
+body{
+  background:
+    radial-gradient(circle at 8% 12%,rgba(30,102,255,.30),transparent 24%),
+    radial-gradient(circle at 92% 18%,rgba(0,184,255,.24),transparent 25%),
+    radial-gradient(circle at 50% 88%,rgba(94,75,255,.22),transparent 32%),
+    linear-gradient(135deg,#eef7ff 0%,#dceeff 48%,#f7fbff 100%) !important;
+  background-attachment:fixed !important;
+}
+body::before{
+  opacity:.55 !important;
+  background-image:
+    linear-gradient(rgba(22,91,190,.09) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(22,91,190,.09) 1px,transparent 1px) !important;
+  background-size:28px 28px !important;
+}
+[data-theme="dark"] body,body.dark,.dark body{
+  background:
+    radial-gradient(circle at 8% 12%,rgba(30,102,255,.36),transparent 24%),
+    radial-gradient(circle at 92% 18%,rgba(0,184,255,.25),transparent 25%),
+    radial-gradient(circle at 50% 88%,rgba(112,88,255,.24),transparent 32%),
+    linear-gradient(135deg,#06152b 0%,#0a2040 50%,#071529 100%) !important;
+}
+</style><style id='mishraankush-v10-premium'>
+/* =========================================================
+   MishraAnkush V10 — Premium Responsive Design System
+   ========================================================= */
+:root{
+  --ma-primary:#2563eb;
+  --ma-primary-2:#06b6d4;
+  --ma-accent:#8b5cf6;
+  --ma-bg:#f5f8ff;
+  --ma-surface:rgba(255,255,255,.82);
+  --ma-text:#0f172a;
+  --ma-muted:#64748b;
+  --ma-border:rgba(148,163,184,.22);
+  --ma-shadow:0 18px 55px rgba(15,23,42,.10);
+  --ma-radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;min-width:0;overflow-x:hidden;color:var(--ma-text);
+  background:
+    radial-gradient(circle at 5% 5%,rgba(37,99,235,.18),transparent 25%),
+    radial-gradient(circle at 95% 10%,rgba(6,182,212,.15),transparent 24%),
+    radial-gradient(circle at 50% 100%,rgba(139,92,246,.13),transparent 30%),
+    linear-gradient(135deg,#f7fbff,#eaf3ff 52%,#f8fbff);
+  background-attachment:fixed;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.42;
+  background-image:
+    linear-gradient(rgba(37,99,235,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(37,99,235,.055) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+a{text-decoration:none}
+button{cursor:pointer}
+.ma-glass,.card,.panel,.dashboard-card,.subject-card,.chapter-card{
+  border:1px solid var(--ma-border);
+  box-shadow:var(--ma-shadow);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.ma-glass{background:var(--ma-surface);border-radius:var(--ma-radius)}
+.ma-premium-hero{
+  position:relative;overflow:hidden;border-radius:30px;padding:clamp(24px,5vw,52px);
+  color:#fff;background:linear-gradient(135deg,#0b1f44 0%,#123c85 48%,#075985 100%);
+  box-shadow:0 24px 70px rgba(15,23,42,.22);
+}
+.ma-premium-hero::before,.ma-premium-hero::after{
+  content:"";position:absolute;border-radius:50%;filter:blur(3px);pointer-events:none;
+}
+.ma-premium-hero::before{width:260px;height:260px;right:-80px;top:-100px;background:rgba(56,189,248,.24)}
+.ma-premium-hero::after{width:220px;height:220px;left:-100px;bottom:-120px;background:rgba(139,92,246,.22)}
+.ma-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase
+}
+.ma-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.ma-stat{
+  padding:18px;border-radius:20px;background:rgba(255,255,255,.78);
+  border:1px solid rgba(148,163,184,.2);box-shadow:0 12px 35px rgba(15,23,42,.07)
+}
+.ma-stat strong{display:block;font-size:1.65rem;line-height:1.1}
+.ma-stat span{display:block;color:var(--ma-muted);font-size:.82rem;margin-top:6px}
+.ma-section-title{display:flex;align-items:end;justify-content:space-between;gap:16px;margin:28px 0 14px}
+.ma-section-title h2{margin:0;font-size:clamp(1.25rem,2.5vw,1.8rem)}
+.ma-section-title p{margin:5px 0 0;color:var(--ma-muted)}
+.ma-feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ma-feature{
+  position:relative;overflow:hidden;padding:22px;border-radius:22px;
+  background:rgba(255,255,255,.84);border:1px solid var(--ma-border);
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease
+}
+.ma-feature:hover{transform:translateY(-4px);box-shadow:0 22px 55px rgba(15,23,42,.13);border-color:rgba(37,99,235,.25)}
+.ma-feature-icon{
+  width:46px;height:46px;border-radius:15px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#dbeafe,#cffafe);font-size:1.3rem;margin-bottom:14px
+}
+.ma-feature h3{margin:0 0 7px}
+.ma-feature p{margin:0;color:var(--ma-muted);line-height:1.55}
+.ma-progress{height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+.ma-progress>i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--ma-primary),var(--ma-primary-2),var(--ma-accent))}
+.ma-ai{
+  position:relative;overflow:hidden;padding:24px;border-radius:26px;color:#fff;
+  background:linear-gradient(135deg,#111827,#172554 58%,#0e7490);
+  box-shadow:0 22px 65px rgba(15,23,42,.22)
+}
+.ma-ai::after{content:"";position:absolute;width:300px;height:300px;right:-130px;bottom:-160px;border-radius:50%;background:rgba(6,182,212,.18)}
+.ma-ai-badge{display:inline-flex;gap:7px;align-items:center;border-radius:999px;padding:6px 10px;background:rgba(255,255,255,.1);font-size:.78rem}
+.ma-quick-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+.ma-quick-actions button{
+  border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;
+  border-radius:13px;padding:10px 13px;transition:.18s ease
+}
+.ma-quick-actions button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}
+.ma-chip-row{display:flex;gap:8px;flex-wrap:wrap}
+.ma-chip{padding:7px 10px;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-size:.78rem;font-weight:700}
+.ma-command{
+  display:flex;gap:10px;padding:8px;border-radius:17px;background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.15);margin-top:17px
+}
+.ma-command input{
+  min-width:0;flex:1;border:0;outline:0;background:transparent;color:#fff;padding:10px
+}
+.ma-command input::placeholder{color:rgba(255,255,255,.62)}
+.ma-command button{border:0;border-radius:12px;padding:10px 14px;background:#fff;color:#0f172a;font-weight:800}
+.ma-floating{
+  position:fixed;right:20px;bottom:20px;z-index:50;width:58px;height:58px;border:0;border-radius:50%;
+  color:#fff;background:linear-gradient(135deg,#2563eb,#7c3aed);
+  box-shadow:0 15px 35px rgba(37,99,235,.35);font-size:1.25rem
+}
+.ma-kbd{font-size:.7rem;padding:2px 6px;border:1px solid rgba(255,255,255,.2);border-radius:5px}
+@media(max-width:1000px){
+ .ma-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .ma-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:700px){
+ body{background-attachment:scroll}
+ .ma-stat-grid,.ma-feature-grid{grid-template-columns:1fr}
+ .ma-premium-hero{border-radius:22px;padding:22px}
+ .ma-section-title{align-items:flex-start;flex-direction:column}
+ .ma-floating{right:14px;bottom:14px}
+}
+@media(prefers-reduced-motion:reduce){
+ *{scroll-behavior:auto!important;transition:none!important;animation:none!important}
+}
+[data-theme="dark"] body,body.dark,.dark body{
+  --ma-bg:#07111f;--ma-surface:rgba(15,23,42,.82);--ma-text:#e5eefc;--ma-muted:#94a3b8;
+  background:
+    radial-gradient(circle at 5% 5%,rgba(37,99,235,.30),transparent 25%),
+    radial-gradient(circle at 95% 10%,rgba(6,182,212,.20),transparent 24%),
+    radial-gradient(circle at 50% 100%,rgba(139,92,246,.18),transparent 30%),
+    linear-gradient(135deg,#050d1b,#0a1930 52%,#07111f);
+}
+[data-theme="dark"] .ma-stat,[data-theme="dark"] .ma-feature,body.dark .ma-stat,body.dark .ma-feature{
+ background:rgba(15,23,42,.82);color:#e5eefc
+}
+</style></head>
+<body>
+<header class="top">
+  <a class="brand" href="#" aria-label="EduNexa home"><span class="logo">M</span><span><b>MishraAnkush</b><small>NEB Class 11–12 Study Hub</small></span></a>
+  <div class="top-actions"><button id="theme" class="icon-btn" aria-label="Toggle theme">☼</button><button id="menu" class="icon-btn" aria-label="Open menu">☰</button></div>
+</header>
+<div class="layout">
+<aside id="side">
+<nav>
+<button class="nav active" data-view="home">⌂ <span>Dashboard</span></button>
+<button class="nav" data-view="library">▣ <span>Subject Library</span></button>
+<button class="nav" data-view="notes">▤ <span>My Notes</span></button>
+<button class="nav" data-view="practice">✓ <span>Practice</span></button>
+<button class="nav" data-view="quiz">? <span>Quiz</span></button>
+<button class="nav" data-view="analytics">◈ <span>Analytics</span></button>
+<button class="nav" data-view="about">ⓘ <span>About & Sources</span></button>
+</nav>
+<div class="side-note"><b>MishraAnkush Study Engine</b><span>Every listed chapter now has an original summary, key points and answered revision questions.</span></div>
+</aside>
+<main id="main">
+<section class="view" id="home">
+<div class="hero">
+<div><p class="eyebrow">NEPAL • CLASS 11–12</p><h1>Welcome back,<br><span>Ankush Mishra 👋</span></h1><p>Chapter-wise summaries, key points, answered questions, practice, quizzes and a fast built-in AI study assistant — designed for phone and laptop.</p>
+<div class="hero-btns"><button class="primary" data-view="library">Open study library →</button><button class="secondary" data-view="quiz">Start quiz</button></div></div>
+<div class="orb"><strong>AI</strong><small>STUDY<br>ASSISTANT</small></div>
+</div>
+<div class="stats"><div><span>📚</span><b id="subjects">0</b><small>subjects</small></div><div><span>▤</span><b id="chapters">0</b><small>chapters</small></div><div><span>🔥</span><b id="streak">0</b><small>day streak</small></div><div><span>🎯</span><b id="avg">0%</b><small>average</small></div></div>
+<div class="grid2">
+<section class="panel"><p class="eyebrow">STREAMS</p><h2>Choose your class</h2><div class="stream-grid"><button class="stream" data-grade="11"><b>Class 11</b><span>Science + Management + Common</span></button><button class="stream" data-grade="12"><b>Class 12</b><span>Science + Management + Common</span></button></div></section>
+<section class="panel"><p class="eyebrow">QUICK ACTIONS</p><h2>Continue learning</h2><div class="quick-grid"><button class="quick" data-view="library">🔎 Find a chapter</button><button class="quick" id="askAiHome">✨ Ask AI Assistant</button><button class="quick" data-view="notes">📝 My notes</button><button class="quick" data-view="analytics">📊 My progress</button></div></section>
+</div>
+<div class="home-ai panel">
+  <div class="home-ai-copy">
+    <p class="eyebrow">✦ NEXA AI ASSISTANT</p>
+    <h2>Study with your personal AI assistant</h2>
+    <p>Ask about chapters, summaries, key points and questions with answers. Nexa AI is ready whenever you need help.</p>
+    <div class="ai-chip-row">
+      <button class="ai-chip" id="askAiPicture1">Explain a chapter</button>
+      <button class="ai-chip" id="askAiPicture2">Give me 5 questions</button>
+      <button class="ai-chip" id="askAiPicture3">Summarize a topic</button>
+    </div>
+    <button class="primary" id="askAiPicture">Open AI Assistant →</button>
+  </div>
+  <div class="ai-visual" aria-hidden="true"><div class="ai-book">▤</div><div class="ai-ring"></div><b>AI</b><small>LEARN<br>SMARTER</small></div>
+</div>
+<div class="performance"><div><span class="eyebrow">PERFORMANCE</span><h2>Lightweight by design</h2><p>System fonts, no render-blocking third-party fonts, lazy study data, compact assets and cached static files keep the first screen fast.</p></div><div class="perf-badge">FAST<br><small>STATIC CORE</small></div></div>
+</section>
+
+<section class="view hidden" id="library">
+<div class="page"><div><p class="eyebrow">SUBJECT LIBRARY</p><h1>All subjects & chapters</h1><p>Open any subject. Every chapter contains a summary, key points and questions with answers.</p></div>
+<div class="filters"><select id="grade"><option value="all">All classes</option><option value="11">Class 11</option><option value="12">Class 12</option></select><select id="stream"><option value="all">All streams</option><option value="Science">Science</option><option value="Management">Management</option><option value="Common">Common</option></select><input id="search" inputmode="search" autocomplete="off" placeholder="Search subject or chapter…"></div></div>
+<div id="subjectGrid" class="subject-grid"></div>
+</section>
+
+<section class="view hidden" id="subject"><button class="back secondary" data-view="library">← Back to library</button><div class="subject-hero"><div><p class="eyebrow" id="subjectMeta"></p><h1 id="subjectTitle"></h1><p id="subjectDesc" class="muted"></p></div><div class="badge" id="chapterCount"></div></div><div id="chapterList" class="chapter-grid"></div></section>
+
+<section class="view hidden" id="chapter"><button class="back secondary" id="backSubject">← Back to subject</button><article class="chapter"><p class="eyebrow" id="chMeta"></p><h1 id="chTitle"></h1><div id="loadingStudy" class="panel loading">Loading complete study pack…</div><div id="studyPack" class="chapter-grid2 hidden">
+<div><section class="material"><h2>📌 Chapter Summary</h2><div id="chNotes"></div></section><section class="material"><h2>🔑 Key Points</h2><div id="chTerms"></div></section></div>
+<aside><section class="material question-box"><h2>❓ Questions & Answers</h2><div id="chQuestions"></div></section><button class="primary full" id="markDone">✓ Mark chapter studied</button></aside>
+</div></article></section>
+
+<section class="view hidden" id="notes"><div class="page"><div><p class="eyebrow">PERSONAL NOTES</p><h1>My Notes</h1><p>Your private notes are stored locally in this browser.</p></div></div><div class="grid2"><form class="panel form" id="noteForm"><h2>Add note</h2><input id="nt" required placeholder="Title"><input id="ns" placeholder="Subject"><textarea id="nb" rows="8" required placeholder="Write your note…"></textarea><button class="primary">Save note</button></form><div id="myNotes" class="notes"></div></div></section>
+
+<section class="view hidden" id="practice"><div class="page"><div><p class="eyebrow">PRACTICE LOG</p><h1>Practice & Results</h1><p>Record real scores to track progress.</p></div></div><div class="grid2"><form class="panel form" id="resultForm"><h2>Record result</h2><input id="rt" required placeholder="Topic / chapter"><input id="rs" required type="number" min="0" max="100" placeholder="Score 0–100"><select id="rtype"><option>Practice</option><option>Assignment</option><option>Mock Test</option></select><button class="primary">Save result</button></form><div class="panel"><h2>Recent results</h2><div id="results"></div></div></div></section>
+
+<section class="view hidden" id="quiz"><div class="page"><div><p class="eyebrow">EXAM MODE</p><h1>Quick Quiz</h1><p>Questions are generated from your chapter study bank.</p></div><span class="badge" id="qcount"></span></div><div class="quizpanel panel" id="quizbox"></div></section>
+
+<section class="view hidden" id="analytics"><div class="page"><div><p class="eyebrow">YOUR DATA</p><h1>Analytics</h1><p>Only your recorded activity is used.</p></div></div><div class="grid2"><section class="panel score"><div class="ring" id="ring"><span id="ringText">0%</span></div><div><h2 id="scoreTitle">No data yet</h2><p id="scoreCopy" class="muted">Complete a quiz or record a result.</p></div></section><section class="panel"><h2>Focus topics</h2><div id="weak"></div></section></div></section>
+
+<section class="view hidden" id="about"><div class="page"><div><p class="eyebrow">V4 • CURRICULUM & SOURCES</p><h1>MishraAnkush Study Engine</h1><p>The chapter structure follows the course list included in this project. Study text is original revision support and is not a reproduction of copyrighted textbook pages.</p></div></div><div class="panel source"><h2>Official curriculum reference</h2><p>Use the official Curriculum Development Centre resources for prescribed textbooks and curriculum documents.</p><div class="source-links"><a target="_blank" rel="noopener" href="https://moecdc.gov.np/">CDC Nepal</a><a target="_blank" rel="noopener" href="https://lib.moecdc.gov.np/elibrary/">CDC E-Library</a></div></div></section>
+
+<footer><b>MishraAnkush</b><span>Learn • Practice • Create • Grow</span><a target="_blank" rel="noopener" href="https://www.instagram.com/_ankushx?igsh=MTFlZ2UxbXdlaWFzMg==&igsi=MTFlZ2UxbXdlaWFzMg==">◎ Instagram</a><a href="mailto:mishraankush2065@gmail.com">✉ Gmail</a><small>© MishraAnkush</small></footer>
+</main></div>
+
+<div id="toast" class="toast" role="status"></div>
+<button id="aiFab" class="ai-fab" aria-label="Open AI Assistant">✦ AI</button>
+<section id="aiPanel" class="ai-panel" aria-label="AI Study Assistant">
+<div class="ai-head"><div><b>✦ Nexa AI Assistant</b><small>Offline study assistant • V4</small></div><button id="aiClose" class="icon-btn">×</button></div>
+<div id="aiMessages" class="ai-messages"><div class="ai-msg bot">Hi! Ask me about a chapter, summary, key points, questions, or say <b>open Physics Kinematics</b>.</div></div>
+<div class="ai-suggestions"><button data-ai="Summarize Physics Kinematics">Summarize Kinematics</button><button data-ai="Give me questions from Chemistry">Chemistry questions</button><button data-ai="Explain SQL">Explain SQL</button></div>
+<form id="aiForm" class="ai-input"><input id="aiInput" autocomplete="off" placeholder="Ask about your studies…" aria-label="Ask Nexa AI"><button class="primary">Send</button></form>
+</section>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  const openAI=()=>{const b=document.getElementById("aiFab"); if(b)b.click();};
+  [["askAiPicture",""],["askAiPicture1","Explain a chapter"],["askAiPicture2","Give me 5 questions"],["askAiPicture3","Summarize a topic"]].forEach(([id,msg])=>{
+    const el=document.getElementById(id); if(!el)return;
+    el.addEventListener("click",()=>{openAI(); if(msg){setTimeout(()=>{const i=document.getElementById("aiInput"); if(i){i.value=msg;i.focus();}},80);}});
+  });
+});
+</script><script src="app.js" defer></script>
+
+<section class="ma-premium-suite" aria-label="MishraAnkush Premium Study Suite" style="width:min(1200px,100%);margin:24px auto;padding:0 14px">
+  <div class="ma-premium-hero">
+    <span class="ma-eyebrow">✦ Premium Learning Suite</span>
+    <h1 style="font-size:clamp(2rem,5vw,3.6rem);margin:16px 0 10px;position:relative;z-index:1">Learn smarter with MishraAnkush.</h1>
+    <p style="max-width:700px;line-height:1.65;color:rgba(255,255,255,.78);margin:0;position:relative;z-index:1">Your complete study dashboard for chapters, notes, topics, answers, practice and AI-powered revision — designed for phone, tablet and laptop.</p>
+    <div class="ma-stat-grid" style="margin-top:24px;position:relative;z-index:1">
+      <div class="ma-stat"><strong>263+</strong><span>Chapters</span></div>
+      <div class="ma-stat"><strong>1000+</strong><span>Study Questions</span></div>
+      <div class="ma-stat"><strong>24/7</strong><span>AI Study Help</span></div>
+      <div class="ma-stat"><strong>3×</strong><span>Device Responsive</span></div>
+    </div>
+  </div>
+
+  <div class="ma-section-title">
+    <div><h2>Premium Study Tools</h2><p>Everything you need in one focused workspace.</p></div>
+  </div>
+  <div class="ma-feature-grid">
+    <article class="ma-feature"><div class="ma-feature-icon">🧠</div><h3>Smart Revision</h3><p>Review summaries, key points and important topics without leaving your chapter.</p></article>
+    <article class="ma-feature"><div class="ma-feature-icon">🎯</div><h3>Exam Mode</h3><p>Practice questions, track attempts and focus on topics that need more revision.</p></article>
+    <article class="ma-feature"><div class="ma-feature-icon">📚</div><h3>Complete Chapters</h3><p>Jump between chapters, topics, notes, questions and answers from one study flow.</p></article>
+    <article class="ma-feature"><div class="ma-feature-icon">📈</div><h3>Progress Center</h3><p>Use progress indicators and revision goals to build a consistent study routine.</p></article>
+    <article class="ma-feature"><div class="ma-feature-icon">🔖</div><h3>Quick Revision</h3><p>Bookmark important material and return to your most useful study sections quickly.</p></article>
+    <article class="ma-feature"><div class="ma-feature-icon">⚡</div><h3>Fast Interface</h3><p>Lightweight visuals, responsive grids and reduced-motion support keep the interface smooth.</p></article>
+  </div>
+
+  <div class="ma-section-title"><div><h2>Progress Snapshot</h2><p>Keep your learning momentum visible.</p></div></div>
+  <div class="ma-glass" style="padding:20px">
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:9px"><b>Study journey</b><span style="color:var(--ma-muted)">Keep going</span></div>
+    <div class="ma-progress"><i style="width:68%"></i></div>
+    <div class="ma-chip-row" style="margin-top:14px"><span class="ma-chip">Notes</span><span class="ma-chip">Questions</span><span class="ma-chip">Revision</span><span class="ma-chip">Practice</span></div>
+  </div>
+
+  <div class="ma-section-title"><div><h2>Ask Nexa AI</h2><p>Your study assistant, always one search away.</p></div></div>
+  <div class="ma-ai">
+    <span class="ma-ai-badge">✦ Nexa AI Assistant</span>
+    <h2 style="margin:14px 0 7px">What are you studying today?</h2>
+    <p style="color:rgba(255,255,255,.72);margin:0">Search for a chapter, topic, summary, question or answer.</p>
+    <div class="ma-command">
+      <input id="maPremiumAiInput" placeholder="e.g. Physics chapter 1 summary">
+      <button type="button" id="maPremiumAiBtn">Ask AI</button>
+    </div>
+    <div class="ma-quick-actions">
+      <button type="button" data-ma-ai="Give me a quick revision plan">Revision Plan</button>
+      <button type="button" data-ma-ai="Give me important questions">Important Questions</button>
+      <button type="button" data-ma-ai="Explain my current chapter">Explain Chapter</button>
+    </div>
+    <div id="maPremiumAiOutput" style="margin-top:15px;line-height:1.55;color:rgba(255,255,255,.85)"></div>
+  </div>
+</section>
+<button class="ma-floating" id="maTopBtn" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  const input=document.getElementById('maPremiumAiInput');
+  const btn=document.getElementById('maPremiumAiBtn');
+  const out=document.getElementById('maPremiumAiOutput');
+  function ask(q){
+    q=(q||'').trim();
+    if(!q)return;
+    out.textContent='Searching your study library for: '+q;
+    try{
+      const candidates=[...document.querySelectorAll('h1,h2,h3,h4,p,button,[data-topic],[data-chapter]')];
+      const hit=candidates.find(el=>(el.textContent||'').toLowerCase().includes(q.toLowerCase()));
+      if(hit){
+        out.textContent='Found a related study section: '+hit.textContent.trim().slice(0,220);
+        hit.scrollIntoView({behavior:'smooth',block:'center'});
+      }else{
+        out.textContent='Nexa AI is ready. Try a chapter name, subject, topic, “summary”, “questions”, or “answers” to search your study content.';
+      }
+    }catch(e){ out.textContent='Nexa AI is ready to help you study.'; }
+  }
+  if(btn)btn.addEventListener('click',()=>ask(input.value));
+  if(input)input.addEventListener('keydown',e=>{if(e.key==='Enter')ask(input.value)});
+  document.querySelectorAll('[data-ma-ai]').forEach(b=>b.addEventListener('click',()=>ask(b.dataset.maAi)));
+  const top=document.getElementById('maTopBtn');
+  if(top)top.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+})();
+</script>
+</body></html>
