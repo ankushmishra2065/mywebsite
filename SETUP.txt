@@ -1,0 +1,13 @@
+MISHRA WEB STUDIO — ONE FILE EMAIL SETUP
+
+1. Open index.html.
+2. Search for YOUR_WEB3FORMS_ACCESS_KEY.
+3. Create a Web3Forms access key at https://web3forms.com/
+4. Paste your access key there.
+5. Replace YOUR_BUSINESS_EMAIL@example.com with the email where you want enquiries.
+6. Upload only index.html to your hosting.
+7. Submit a test enquiry from another email/device.
+
+The form sends the visitor's name, business, email, selected service, budget and project details to your configured business email through Web3Forms.
+
+Do not put passwords, private keys, or other secrets in the HTML file.
