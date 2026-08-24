@@ -184,9 +184,8 @@ if(tilt && window.matchMedia("(pointer:fine)").matches){
   2) Replace YOUR_WEB3FORMS_ACCESS_KEY below.
   3) Set YOUR_BUSINESS_EMAIL to the email where enquiries should arrive.
 */
-const WEB3FORMS_ACCESS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
-const YOUR_BUSINESS_EMAIL = "YOUR_BUSINESS_EMAIL@example.com";
-
+const WEB3FORMS_ACCESS_KEY = "f2cddd31-c6a8-45ac-8cf8-85058663bb5e";
+const YOUR_BUSINESS_EMAIL = "mishraankush2065@gmail.com";
 const projectForm = document.getElementById("contactForm");
 if (projectForm) {
   projectForm.addEventListener("submit", async function (event) {
@@ -205,7 +204,7 @@ if (projectForm) {
     data.append("botcheck", "");
 
     try {
-      if (WEB3FORMS_ACCESS_KEY === "YOUR_WEB3FORMS_ACCESS_KEY") {
+      if (WEB3FORMS_ACCESS_KEY === "mishraankush2065@gmail.com") {
         alert("Setup needed: replace YOUR_WEB3FORMS_ACCESS_KEY and YOUR_BUSINESS_EMAIL near the bottom of index.html.");
         return;
       }
