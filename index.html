@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090b14">
+  <meta name="description" content="Ankush Study Hub — complete study resources, quizzes, progress tracking and AI-powered learning.">
+  <title>Ankush Study Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">A</div>
+        <div><strong>Ankush</strong><span>Study Hub</span></div>
+      </div>
+      <nav>
+        <button class="nav-item active" data-view="dashboard"><span>⌂</span> Dashboard</button>
+        <button class="nav-item" data-view="courses"><span>▣</span> Courses</button>
+        <button class="nav-item" data-view="notes"><span>▤</span> Notes</button>
+        <button class="nav-item" data-view="practice"><span>✓</span> Practice</button>
+        <button class="nav-item" data-view="ai"><span>✦</span> AI Study</button>
+        <button class="nav-item" data-view="music"><span>♫</span> Music</button>
+        <button class="nav-item" data-view="progress"><span>◔</span> Progress</button>
+        <button class="nav-item" data-view="bookmarks"><span>☆</span> Bookmarks</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button class="nav-item" data-view="admin"><span>⚙</span> Admin</button>
+        <div class="profile-mini">
+          <div class="avatar">A</div><div><b>Ankush</b><small>Student</small></div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn mobile-menu" id="menuBtn">☰</button>
+        <div class="search-wrap">
+          <span>⌕</span><input id="globalSearch" placeholder="Search notes, chapters, questions...">
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" id="themeBtn" title="Toggle theme">◐</button>
+          <button class="icon-btn" title="Notifications">♢</button>
+          <button class="avatar" id="profileBtn">A</button>
+        </div>
+      </header>
+
+      <div id="app"></div>
+    </main>
+  </div>
+
+  <div class="mobile-nav">
+    <button data-view="dashboard">⌂<small>Home</small></button>
+    <button data-view="courses">▣<small>Courses</small></button>
+    <button data-view="ai">✦<small>AI</small></button>
+    <button data-view="practice">✓<small>Quiz</small></button>
+    <button data-view="profile">A<small>Profile</small></button>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-card" id="modalContent"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
