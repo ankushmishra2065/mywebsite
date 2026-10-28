@@ -1,0 +1,202 @@
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+let toastTimer;function toast(t){const el=$("#toast");el.textContent=t;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2300)}
+$("#year").textContent=new Date().getFullYear();
+if(localStorage.getItem("ash-theme")==="light")document.body.classList.add("light");
+$("#themeToggle").onclick=()=>{document.body.classList.toggle("light");localStorage.setItem("ash-theme",document.body.classList.contains("light")?"light":"dark")};
+let authMode="signin";
+const readUsers=()=>{try{return JSON.parse(localStorage.getItem("ash-users")||"{}")}catch{return {}}};
+const currentUser=()=>{try{return JSON.parse(localStorage.getItem("ash-current-user")||"null")}catch{return null}};
+function renderAuth(){const u=currentUser();$("#welcomeName").hidden=!u;$("#welcomeName").textContent=u?"Hi, "+u.name.split(/\s+/)[0]:"";$("#loginOpen").textContent=u?"Account / Sign out":"Sign in / Sign up";$("#signOut").hidden=!u;}
+function setAuthMode(mode){authMode=mode;$("#signInTab").classList.toggle("active",mode==="signin");$("#signUpTab").classList.toggle("active",mode==="signup");$("#nameField").hidden=mode!=="signup";$("#authName").required=mode==="signup";$("#authTitle").textContent=mode==="signup"?"Create your account.":"Welcome back.";$("#authDescription").textContent=mode==="signup"?"Create a profile to personalise your study hub.":"Sign in to show your name on the dashboard on this device.";$("#authSubmit").textContent=mode==="signup"?"Create account":"Sign in";$("#authPassword").autocomplete=mode==="signup"?"new-password":"current-password";}
+async function hashPassword(value){if(window.crypto&&crypto.subtle){const bytes=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(value));return [...new Uint8Array(bytes)].map(x=>x.toString(16).padStart(2,"0")).join("")}return "local-demo-"+value;}
+$("#loginOpen").onclick=()=>{if(currentUser()){setAuthMode("signin");$("#authDialog").showModal();$("#signOut").hidden=false;}else{$("#authDialog").showModal();setAuthMode("signin")}};$("#authClose").onclick=()=>$("#authDialog").close();$("#signInTab").onclick=()=>setAuthMode("signin");$("#signUpTab").onclick=()=>setAuthMode("signup");
+$("#authForm").onsubmit=async e=>{e.preventDefault();const email=$("#authEmail").value.trim().toLowerCase(),password=$("#authPassword").value,name=$("#authName").value.trim();let users=readUsers();if(authMode==="signup"){if(!name)return toast("Please enter your name.");if(users[email])return toast("An account with this email already exists. Sign in instead.");users[email]={name,passwordHash:await hashPassword(password)};localStorage.setItem("ash-users",JSON.stringify(users));localStorage.setItem("ash-current-user",JSON.stringify({email,name}));toast("Account created on this device. Welcome!");}else{if(!users[email])return toast("No account found on this device. Please sign up first.");if(users[email].passwordHash!==await hashPassword(password))return toast("Incorrect password. Try again.");localStorage.setItem("ash-current-user",JSON.stringify({email,name:users[email].name}));toast("Signed in successfully.");}renderAuth();$("#authDialog").close();$("#authForm").reset();};
+$("#signOut").onclick=()=>{localStorage.removeItem("ash-current-user");renderAuth();$("#authDialog").close();toast("Signed out.")};renderAuth();
+const subjects=[{name:"Accountancy",icon:"₹",color:"purple",desc:"Company accounts & fundamentals"},{name:"Economics",icon:"↗",color:"blue",desc:"Micro and macro concepts"},{name:"Computer Science",icon:"⌘",color:"green",desc:"C programming & databases"},{name:"Social Studies",icon:"◎",color:"orange",desc:"Society and development"},{name:"English",icon:"Aa",color:"pink",desc:"Writing and grammar"}];
+let activeClass="All",activeSubject="All",query="",activeNote=null;
+const CUSTOM_NOTES_KEY = "ash-custom-syllabus-topics";
+const readCustomTopics = () => { try { const v = JSON.parse(localStorage.getItem(CUSTOM_NOTES_KEY) || "[]"); return Array.isArray(v) ? v : []; } catch { return []; } };
+const notes = [...(window.STUDY_NOTES || []), ...readCustomTopics()]
+  .filter(n => ["Class 11", "Class 12"].includes(n.level) && ["Accountancy", "Economics", "Computer Science", "Social Studies", "English"].includes(n.subject));
+$("#statNotes").textContent=notes.length;
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function renderSubjects(){let counts={};notes.forEach(n=>counts[n.subject]=(counts[n.subject]||0)+1);$("#subjectGrid").innerHTML=subjects.map(s=>`<button class="subject-card ${activeSubject===s.name?"selected":""}" data-subject="${escapeHtml(s.name)}"><span class="subject-symbol ${s.color}">${s.icon}</span><span><b>${escapeHtml(s.name)}</b><small>${counts[s.name]||0} topics · ${escapeHtml(s.desc)}</small></span></button>`).join("");$$(".subject-card").forEach(b=>b.onclick=()=>{activeSubject=activeSubject===b.dataset.subject?"All":b.dataset.subject;$("#subjectFilter").value=activeSubject;renderSubjects();renderNotes()})}
+function filteredNotes(){return notes.filter(n=>(activeClass==="All"||n.level===activeClass)&&(activeSubject==="All"||n.subject===activeSubject)&&(!query||(n.title+" "+n.subject+" "+n.chapter+" "+n.tags+" "+n.summary).toLowerCase().includes(query)))}
+function renderNotes(){let list=filteredNotes();$("#resultsLabel").textContent=`Showing ${list.length} topic${list.length===1?"":"s"} · ${activeClass==="All"?"All levels":activeClass} · ${activeSubject==="All"?"All subjects":activeSubject}`;$("#notesGrid").innerHTML=list.map(n=>`<article class="note-card"><div class="note-meta"><span class="subject-tag">${escapeHtml(n.subject.toUpperCase())}</span><span>${escapeHtml(n.level)}</span></div><h3>${escapeHtml(n.title)}</h3><p>${escapeHtml(n.summary)}</p><div class="note-meta"><span>${escapeHtml(n.chapter)}</span><span>${n.sections.length} sections</span></div><button data-open-note="${escapeHtml(n.id)}">Read full notes ↗</button></article>`).join("");$("#emptyState").hidden=list.length>0;$("#notesGrid").hidden=list.length===0;$$("[data-open-note]").forEach(b=>b.onclick=()=>openNote(b.dataset.openNote))}
+function renderAll(){renderSubjects();renderNotes()}
+$("#searchInput").oninput=e=>{query=e.target.value.trim().toLowerCase();renderNotes()};
+$("#subjectFilter").onchange=e=>{activeSubject=e.target.value;renderSubjects();renderNotes()};
+$$("[data-class]").forEach(b=>b.onclick=()=>{activeClass=b.dataset.class;$$("[data-class]").forEach(x=>x.classList.toggle("active",x===b));renderNotes()});
+$("#clearSearch").onclick=()=>{query="";activeClass="All";activeSubject="All";$("#searchInput").value="";$("#subjectFilter").value="All";$$("[data-class]").forEach(x=>x.classList.toggle("active",x.dataset.class==="All"));renderAll()};
+function openNote(id){activeNote=notes.find(n=>n.id===id);if(!activeNote)return;$("#dialogSubject").textContent=activeNote.level.toUpperCase()+" · "+activeNote.subject.toUpperCase();$("#dialogTitle").textContent=activeNote.title;$("#dialogMeta").textContent=activeNote.chapter+" · "+activeNote.sections.length+" sections";$("#dialogBody").innerHTML=activeNote.sections.map(s=>`<section><h3>${escapeHtml(s[0])}</h3><div>${s[1]}</div></section>`).join("");updateBookmarkButton();$("#noteDialog").showModal()}
+$("#dialogClose").onclick=()=>$("#noteDialog").close();
+function bookmarks(){try{return JSON.parse(localStorage.getItem("ash-bookmarks")||"[]")}catch{return []}}
+function updateBookmarkButton(){let yes=bookmarks().includes(activeNote?.id);$("#bookmarkTopic").textContent=yes?"★ Bookmarked":"☆ Bookmark"}
+$("#bookmarkTopic").onclick=()=>{if(!activeNote)return;let a=bookmarks();if(a.includes(activeNote.id))a=a.filter(x=>x!==activeNote.id);else a.push(activeNote.id);localStorage.setItem("ash-bookmarks",JSON.stringify(a));updateBookmarkButton();toast(a.includes(activeNote.id)?"Topic bookmarked on this device.":"Bookmark removed.")};
+$("#copyTopic").onclick=async()=>{if(!activeNote)return;let txt=activeNote.title+"\n"+activeNote.chapter+"\n\n"+activeNote.sections.map(s=>s[0]+"\n"+s[1].replace(/<[^>]*>/g," ").replace(/&nbsp;/g," ")).join("\n\n");try{await navigator.clipboard.writeText(txt);toast("Notes copied.")}catch{let ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();let ok=document.execCommand("copy");ta.remove();toast(ok?"Notes copied.":"Copy unavailable in this browser.")}};
+$("#downloadTopic").onclick=()=>{if(!activeNote)return;const plain=activeNote.title+"\n"+activeNote.level+" · "+activeNote.subject+"\n"+activeNote.chapter+"\n\n"+activeNote.sections.map(s=>s[0]+"\n"+s[1].replace(/<[^>]*>/g," ").replace(/&nbsp;/g," ").replace(/&amp;/g,"&")).join("\n\n");const blob=new Blob([plain],{type:"text/plain;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=activeNote.title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+".txt";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);toast("Notes download started.")};
+renderAll();
+// Focus timer
+let chosenMinutes=25,remaining=1500,timer=null;function showTimer(){$("#timerDisplay").textContent=String(Math.floor(remaining/60)).padStart(2,"0")+":"+String(remaining%60).padStart(2,"0")}
+$$("[data-minutes]").forEach(b=>b.onclick=()=>{clearInterval(timer);timer=null;chosenMinutes=+b.dataset.minutes;remaining=chosenMinutes*60;$$("[data-minutes]").forEach(x=>x.classList.toggle("active",x===b));$("#timerStart").textContent="Start focus";showTimer()});
+$("#timerStart").onclick=()=>{if(timer){clearInterval(timer);timer=null;$("#timerStart").textContent="Resume focus";return}if(remaining<=0)remaining=chosenMinutes*60;$("#timerStart").textContent="Pause";timer=setInterval(()=>{remaining--;showTimer();if(remaining<=0){clearInterval(timer);timer=null;$("#timerStart").textContent="Start focus";localStorage.setItem("ash-focus-minutes",String(+(localStorage.getItem("ash-focus-minutes")||0)+chosenMinutes));toast("Focus session complete. Nice work!")}},1000)};
+$("#timerReset").onclick=()=>{clearInterval(timer);timer=null;remaining=chosenMinutes*60;$("#timerStart").textContent="Start focus";showTimer()};showTimer();
+// Streak uses local browser storage. Missing calendar days break the current streak.
+function dateKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function studyDays(){try{return JSON.parse(localStorage.getItem("ash-study-days")||"[]")}catch{return []}}
+function renderStreak(){let arr=studyDays(),now=new Date(),count=0;for(let i=0;i<370;i++){let d=new Date(now);d.setDate(now.getDate()-i);if(arr.includes(dateKey(d)))count++;else if(i>0)break}$("#streakNumber").textContent=count;$("#streakMessage").textContent=arr.includes(dateKey(now))?"Today is logged. Keep your routine going.":count?"You're building a habit — mark today's study when you're done.":"Start your streak by marking a study day.";$("#markStudy").disabled=arr.includes(dateKey(now));$("#markStudy").textContent=arr.includes(dateKey(now))?"✓ Today marked":"✓ Mark today as studied"}
+$("#markStudy").onclick=()=>{let arr=studyDays(),k=dateKey(new Date());if(arr.includes(k))return toast("Today is already marked.");arr.push(k);localStorage.setItem("ash-study-days",JSON.stringify(arr));renderStreak();toast("Study day saved on this device.")};renderStreak();
+// Quick notes are local only
+$("#quickNote").value=localStorage.getItem("ash-quick-note")||"";
+$("#saveNote").onclick=()=>{localStorage.setItem("ash-quick-note",$("#quickNote").value);toast("Quick note saved on this device.")};
+$("#clearNote").onclick=()=>{$("#quickNote").value="";localStorage.removeItem("ash-quick-note");toast("Quick note cleared.")};
+// Randomised mixed-subject practice. Each restart creates a new order and can change the question count.
+const quizBank=[
+{q:"Which accounting equation is correct?",o:["Assets = Liabilities + Capital","Assets = Capital − Liabilities","Liabilities = Assets + Capital","Capital = Assets + Liabilities"],a:0,e:"The accounting equation is Assets = Liabilities + Capital."},
+{q:"What does opportunity cost mean?",o:["Money saved in a bank","The next-best alternative given up","The price of all goods","Annual business profit"],a:1,e:"Opportunity cost is the value of the next-best alternative forgone."},
+{q:"Which C function displays formatted output?",o:["scanf()","strlen()","printf()","return()"],a:2,e:"printf() is commonly used for formatted output."},
+{q:"What is a database record?",o:["A database program","One row or complete entry","A monitor type","A network cable"],a:1,e:"A record is one row representing an entry in a table."},
+{q:"Population density is usually calculated as:",o:["Area ÷ income","Births − deaths","Population ÷ land area","Exports ÷ imports"],a:2,e:"Population density is population divided by land area."},
+{q:"Which financial statement shows assets and liabilities on a date?",o:["Cash book","Balance sheet","Sales journal","Trial balance only"],a:1,e:"A balance sheet reports assets, liabilities and equity at a particular date."},
+{q:"When total revenue rises by selling one more unit, the change is:",o:["Average cost","Marginal revenue","Fixed cost","Capital"],a:1,e:"Marginal revenue is the change in total revenue from selling an additional unit."},
+{q:"Which C loop checks its condition before each iteration?",o:["do-while only","while loop","switch","goto"],a:1,e:"A while loop tests its condition before running the body."},
+{q:"In DBMS, SQL is primarily used to:",o:["Design computer hardware","Manage and query relational data","Edit photos","Compile C programs"],a:1,e:"SQL is used to define, query and manipulate relational databases."},
+{q:"Which is a common feature of a company?",o:["No legal identity","Separate legal entity","No records","No ownership"],a:1,e:"A company generally has a legal identity separate from its members."},
+{q:"A demand curve normally slopes downward because:",o:["Higher price usually lowers quantity demanded","Price never changes","Supply is zero","Income is always fixed"],a:0,e:"Other things equal, a higher price usually reduces quantity demanded."},
+{q:"Which part of a formal letter to the editor states the issue?",o:["Subject or opening","Only the signature","Page number","Envelope colour"],a:0,e:"A clear subject or opening introduces the issue being raised."},
+{q:"Which HTML element creates a hyperlink?",o:["<p>","<a>","<img>","<table>"],a:1,e:"The anchor element <a> creates a hyperlink."},
+{q:"A primary key in a database table should:",o:["Repeat in every row","Uniquely identify each record","Contain only pictures","Always be blank"],a:1,e:"A primary key uniquely identifies each record in its table."},
+{q:"In economics, scarcity means:",o:["Resources are unlimited","Wants exceed available resources","All goods are free","Choices do not exist"],a:1,e:"Scarcity arises because resources are limited relative to wants."},
+{q:"Which is a good first step in solving an accounting problem?",o:["Ignore the question","Identify the required format and data","Guess the final figure","Skip working notes"],a:1,e:"Identify what is required, organise the data, then show working notes."},
+{q:"A function in C is useful because it:",o:["Repeats reusable tasks in organised code","Deletes the operating system","Replaces all variables","Only stores images"],a:0,e:"Functions divide programs into reusable, manageable blocks."},
+{q:"Which is an example of a renewable resource?",o:["Sunlight","Coal","Petroleum","Natural gas"],a:0,e:"Sunlight is continually replenished and is considered renewable."},
+{q:"In a company, equity shares usually represent:",o:["A loan only","Ownership interest","A monthly salary","A tax bill"],a:1,e:"Equity shares represent an ownership interest in a company."},
+{q:"A good study revision method includes:",o:["Only rereading without checking","Active recall and practice questions","Avoiding mistakes","Studying every topic at once"],a:1,e:"Active recall and practice help check understanding and reveal weak areas."},
+{q:"Which instrument is commonly associated with monetary policy?",o:["Open market operations","Depreciation journal","Sales invoice","Trial balance"],a:0,e:"Open market operations are one tool central banks may use to influence liquidity and monetary conditions."},
+{q:"At market equilibrium, which relationship holds?",o:["Demand is always zero","Quantity demanded equals quantity supplied","Supply is always greater than demand","Price must be zero"],a:1,e:"Equilibrium is where quantity demanded equals quantity supplied."},
+{q:"What does a pointer store in C?",o:["Only a decimal number","A memory address","A whole program","A file extension"],a:1,e:"A pointer stores the address of an object of a compatible type."},
+{q:"Which operator gives the address of a variable in C?",o:["%","&","#","!"],a:1,e:"The unary & operator obtains the address of an object."},
+{q:"Which cash flow category commonly includes buying equipment?",o:["Investing activities","Operating activities only","Financing activities only","No category"],a:0,e:"Purchases of long-term assets such as equipment are generally investing cash flows."},
+{q:"Which three levels of government does Nepal have?",o:["Federal, provincial and local","Ward, district and international","Executive, media and private","Central, foreign and judicial"],a:0,e:"Nepal's constitutional structure includes federal, provincial and local levels."},
+{q:"Which is a commonly used human-development indicator?",o:["Life expectancy","Phone wallpaper","Number of roads only","Daily weather"],a:0,e:"Life expectancy is one indicator used to describe health and human development."},
+{q:"What is the main purpose of a function in C?",o:["To organise reusable code for a task","To replace the compiler","To remove all variables","To format the keyboard"],a:0,e:"Functions make programs more modular, reusable and easier to maintain."},
+{q:"A formal letter to the editor should generally use:",o:["Respectful, clear language","Insults and slang","Only emojis","No subject or issue"],a:0,e:"A formal letter should communicate the issue clearly and respectfully."},
+{q:"A cash book can record:",o:["Cash and bank transactions","Only a company's mission","Only computer errors","Only inventory descriptions"],a:0,e:"A cash book records cash transactions and may also include a bank column."}
+];let quiz=[],qi=0,score=0,answered=false;
+function shuffle(items){let a=[...items];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function showQuestion(){let q=quiz[qi];answered=false;$("#quizCount").textContent=`QUESTION ${qi+1} OF ${quiz.length}`;$("#quizScore").textContent=`SCORE ${score}`;$("#quizProgress").style.width=((qi+1)/quiz.length*100)+"%";$("#quizQuestion").textContent=q.q;$("#quizOptions").innerHTML=q.o.map((o,i)=>`<button class="quiz-option" data-option="${i}"><span class="letter">${String.fromCharCode(65+i)}</span><span>${escapeHtml(o)}</span></button>`).join("");$("#quizFeedback").textContent="";$("#nextQuestion").disabled=true;$("#nextQuestion").textContent=qi===quiz.length-1?"Finish quiz ✓":"Next question →";$("#nextQuestion").onclick=nextQuestion;$$("[data-option]").forEach(b=>b.onclick=()=>selectAnswer(+b.dataset.option))}
+function selectAnswer(i){if(answered)return;answered=true;let q=quiz[qi];if(i===q.a)score++;$$("[data-option]").forEach((b,j)=>{b.disabled=true;if(j===q.a)b.classList.add("correct");else if(j===i)b.classList.add("wrong")});$("#quizScore").textContent=`SCORE ${score}`;$("#quizFeedback").textContent=(i===q.a?"Correct! ":"Not quite. ")+q.e;$("#nextQuestion").disabled=false}
+function startQuiz(){let amount=+$("#quizLength").value||5;quiz=shuffle(quizBank).slice(0,Math.min(amount,quizBank.length));qi=0;score=0;showQuestion()}
+function nextQuestion(){if(!answered)return;if(qi<quiz.length-1){qi++;showQuestion()}else{$("#quizQuestion").textContent=`Quiz complete — ${score} / ${quiz.length}`;$("#quizOptions").innerHTML="";$("#quizFeedback").textContent=score===quiz.length?"Excellent work. Try another shuffled set to keep learning.":"Review the explanations, then try a new shuffled set.";$("#nextQuestion").textContent="Try another set ↻";$("#nextQuestion").disabled=false;$("#nextQuestion").onclick=startQuiz;$("#quizCount").textContent="COMPLETED";$("#quizProgress").style.width="100%"}}
+$("#restartQuiz").onclick=startQuiz;$("#quizLength").onchange=startQuiz;startQuiz();
+// Nexa AI sample responses, not a live AI connection.
+function sampleAnswer(q){let x=q.toLowerCase();if(x.includes("plan")||x.includes("30-minute"))return"30-minute study plan:\n• 5 min — review yesterday's notes\n• 15 min — study one difficult concept\n• 7 min — answer practice questions\n• 3 min — write down what to revise next.";if(x.includes("revision")||x.includes("revise")||x.includes("chapter"))return"Try this revision method:\n1. Scan the headings and learning goals.\n2. Recall the main ideas without looking.\n3. Practise 3–5 questions.\n4. Check mistakes and revise weak points.\n5. Summarise the chapter in your own words.";if(x.includes("coding")||x.includes("c programming"))return"C practice question: write a program that reads two integers and prints their sum. Hint: declare two int variables, read them with scanf(), and display the result with printf().";if(x.includes("account"))return"Accountancy tip: write the required format first, show each working note, record debit and credit entries carefully, and check your totals. Open the Accountancy notes in the library for starter revision topics.";if(x.includes("econom"))return"Economics tip: define the term, explain the relationship or causes, and add a labelled diagram when the question asks for one. Search Economics in the notes library for starter topics.";if(x.includes("social"))return"For Social Studies, define the concept, explain key points in logical order, and include a relevant example from Nepal when appropriate. Check the year and source for statistics.";return"Study suggestion:\n• Name your subject and chapter.\n• Write 3 key ideas from memory.\n• Practise a short question.\n• Check your notes and correct any gaps.\n\nThis is a sample response, not a live AI answer."}
+function addMessage(txt,cls){let el=document.createElement("div");el.className="message "+cls;el.textContent=txt;$("#chatMessages").appendChild(el);$("#chatMessages").scrollTop=$("#chatMessages").scrollHeight}
+$("#chatForm").onsubmit=e=>{e.preventDefault();let q=$("#chatInput").value.trim();if(!q)return;addMessage(q,"user-message");$("#chatInput").value="";setTimeout(()=>addMessage(sampleAnswer(q),"bot-message"),150)};
+$$("[data-prompt]").forEach(b=>b.onclick=()=>{$("#chatInput").value=b.dataset.prompt;$("#chatForm").requestSubmit()});
+$("#clearChat").onclick=()=>{$("#chatMessages").innerHTML='<div class="message bot-message">Chat cleared. Tell me the subject and topic you are studying.</div>'};
+
+
+// Owner topic manager. Change this code before publishing the website.
+// Important: a front-end code is not secret; use server-side authentication for real security.
+const ADMIN_ACCESS_CODE = "ANKUSH-ADMIN-CHANGE-ME";
+const adminDialog = $("#adminDialog");
+const customTopicsNow = () => readCustomTopics();
+function refreshAdminStats() {
+  const list = customTopicsNow();
+  $("#adminTopicCount").textContent = `${list.length} custom topic${list.length === 1 ? "" : "s"} saved in this browser`;
+}
+function safePlainTextToHtml(value) {
+  return escapeHtml(value).replace(/\r?\n/g, "<br>");
+}
+$("#adminOpen").onclick = () => {
+  const entered = window.prompt("Enter the owner access code:");
+  if (entered === null) return;
+  if (entered !== ADMIN_ACCESS_CODE) { toast("Access code incorrect."); return; }
+  refreshAdminStats();
+  $("#adminStatus").textContent = "";
+  adminDialog.showModal();
+};
+$("#adminClose").onclick = () => adminDialog.close();
+$("#adminTopicForm").onsubmit = e => {
+  e.preventDefault();
+  const title = $("#adminTitle").value.trim();
+  const chapter = $("#adminChapter").value.trim();
+  const summary = $("#adminSummary").value.trim();
+  const sectionTitle = $("#adminSectionTitle").value.trim();
+  const sectionContent = $("#adminSectionContent").value.trim();
+  if (!title || !chapter || !summary || !sectionTitle || !sectionContent) {
+    $("#adminStatus").textContent = "Please complete all required fields.";
+    return;
+  }
+  const custom = customTopicsNow();
+  const id = "custom-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7);
+  custom.push({
+    id,
+    level: $("#adminLevel").value,
+    subject: $("#adminSubject").value,
+    title,
+    chapter,
+    tags: $("#adminTags").value.trim(),
+    summary,
+    sections: [[sectionTitle, `<p>${safePlainTextToHtml(sectionContent)}</p>`]]
+  });
+  localStorage.setItem(CUSTOM_NOTES_KEY, JSON.stringify(custom));
+  // Refresh the library without reloading, retaining built-in notes.
+  notes.push(custom[custom.length - 1]);
+  $("#statNotes").textContent = notes.length;
+  renderAll();
+  $("#adminTopicForm").reset();
+  $("#adminLevel").value = "Class 12";
+  $("#adminStatus").textContent = "Topic saved and added to the Notes Library on this browser.";
+  refreshAdminStats();
+  toast("Syllabus topic added.");
+};
+$("#exportTopics").onclick = () => {
+  const blob = new Blob([JSON.stringify(customTopicsNow(), null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "ankush-study-hub-custom-topics.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  toast("Custom topics exported.");
+};
+$("#importTopics").onchange = async e => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  try {
+    const parsed = JSON.parse(await file.text());
+    if (!Array.isArray(parsed)) throw new Error("Expected a JSON array.");
+    const valid = parsed.filter(n =>
+      n && ["Class 11", "Class 12"].includes(n.level) &&
+      ["Accountancy", "Economics", "Computer Science", "Social Studies", "English"].includes(n.subject) &&
+      typeof n.title === "string" && typeof n.chapter === "string" &&
+      typeof n.summary === "string" && Array.isArray(n.sections)
+    ).map((n, i) => ({ ...n, id: String(n.id || `imported-${Date.now()}-${i}`) }));
+    if (!valid.length && parsed.length) throw new Error("No valid topics found in this file.");
+    localStorage.setItem(CUSTOM_NOTES_KEY, JSON.stringify(valid));
+    // Replace the in-memory custom entries while preserving built-in entries.
+    for (let i = notes.length - 1; i >= 0; i--) if (String(notes[i].id).startsWith("custom-") || String(notes[i].id).startsWith("imported-")) notes.splice(i, 1);
+    notes.push(...valid);
+    $("#statNotes").textContent = notes.length;
+    renderAll();
+    refreshAdminStats();
+    $("#adminStatus").textContent = `Imported ${valid.length} topics.`;
+    toast(`Imported ${valid.length} topics.`);
+  } catch (err) {
+    $("#adminStatus").textContent = "Import failed: " + err.message;
+  } finally { e.target.value = ""; }
+};
+$("#clearCustomTopics").onclick = () => {
+  if (!window.confirm("Remove every custom topic saved in this browser? Export a backup first if you need it.")) return;
+  localStorage.removeItem(CUSTOM_NOTES_KEY);
+  for (let i = notes.length - 1; i >= 0; i--) if (String(notes[i].id).startsWith("custom-") || String(notes[i].id).startsWith("imported-")) notes.splice(i, 1);
+  $("#statNotes").textContent = notes.length;
+  renderAll();
+  refreshAdminStats();
+  $("#adminStatus").textContent = "Custom topics removed from this browser.";
+  toast("Custom topics cleared.");
+};
