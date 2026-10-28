@@ -99,7 +99,7 @@ $("#clearChat").onclick=()=>{$("#chatMessages").innerHTML='<div class="message b
 
 // Owner topic manager. Change this code before publishing the website.
 // Important: a front-end code is not secret; use server-side authentication for real security.
-const ADMIN_ACCESS_CODE = "ANKUSH-ADMIN-CHANGE-ME";
+const ADMIN_ACCESS_CODE = "Ankush@StudyHub2026!";
 const adminDialog = $("#adminDialog");
 const customTopicsNow = () => readCustomTopics();
 function refreshAdminStats() {
